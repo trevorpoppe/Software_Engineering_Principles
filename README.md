@@ -7,4 +7,4 @@ Welcome to the EC530 respository for the Spring 2025 semester. This repository c
 1. Geo location
    - Description: Given two arrays of geo location, match each point in the first array to the closest one in the second array.
    - Skills Covered: Becoming familiar with Github
-   - Location: 
+   - Location: This project is located in the `Project1-GeoLocationMatching` folder within this repository.
