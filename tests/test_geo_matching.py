@@ -1,8 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import unittest
-from geo_matching import haversine  # Update this based on your function location
+from geo_matching import haversine
 
 class TestGeoFunctions(unittest.TestCase):
-
     def test_haversine(self):
         # Example test for the haversine function
         lat1, lon1 = 42.3601, -71.0589  # Boston
