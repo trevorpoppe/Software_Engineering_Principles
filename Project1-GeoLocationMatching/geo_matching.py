@@ -29,13 +29,55 @@ def match_closest_points(array1, array2):
         matches.append((lat1, lon1, closest_point, min_distance))
     return matches
 
-# Example usage
-array1 = [(42.3601, -71.0589), (40.7128, -74.0060)]  # Boston, NYC
-array2 = [(34.0522, -118.2437), (37.7749, -122.4194)]  # LA, SF
+def get_coordinates_from_user():
+    coordinates = []
+    print("Enter coordinates in the format 'latitude,longitude'. Type 'done' when finished:")
+    while True:
+        user_input = input("> ").strip()
+        if user_input.lower() == "done":
+            break
+        try:
+            lat, lon = map(float, user_input.split(","))
+            coordinates.append((lat, lon))
+        except ValueError:
+            print("Invalid input. Please enter coordinates in the format 'latitude,longitude'.")
+    return coordinates
 
-matches = match_closest_points(array1, array2)
-for match in matches:
-    print(f"Point {match[0:2]} is closest to {match[2]} with a distance of {match[3]:.2f} km")
+def main():
+    print("Choose an option:")
+    print("1. Enter coordinates manually")
+    print("2. Upload arrays from a file")
 
+    choice = input("> ").strip()
+    if choice == "1":
+        print("Enter coordinates for the first array:")
+        array1 = get_coordinates_from_user()
+        print("Enter coordinates for the second array:")
+        array2 = get_coordinates_from_user()
+    elif choice == "2":
+        try:
+            file1 = input("Enter the filename for the first array: ").strip()
+            file2 = input("Enter the filename for the second array: ").strip()
+            with open(file1, "r") as f1, open(file2, "r") as f2:
+                array1 = [tuple(map(float, line.strip().split(","))) for line in f1]
+                array2 = [tuple(map(float, line.strip().split(","))) for line in f2]
+        except FileNotFoundError:
+            print("File not found. Please check the filenames and try again.")
+            return
+        except ValueError:
+            print("File contents must be in the format 'latitude,longitude' per line.")
+            return
+    else:
+        print("Invalid choice. Exiting.")
+        return
+
+    matches = match_closest_points(array1, array2)
+    print("\nResults:")
+    for match in matches:
+        print(f"Point {match[0:2]} is closest to {match[2]} with a distance of {match[3]:.2f} km")
+
+if __name__ == "__main__":
+    main()
 # This script includes code and ideas generated with the assistance of ChatGPT, developed by OpenAI.
-# Date: 22 January 2025
+# ChatGPT was used to enhance functionality and improve user interaction.
+# Date: 24 January 2025
