@@ -1,30 +1,45 @@
 import unittest
-from your_module import haversine, match_closest_points  # Replace 'your_module' with the actual module name if needed
+from unittest.mock import patch
 
-class TestGeoFunctions(unittest.TestCase):
-
+class TestHaversine(unittest.TestCase):
     def test_haversine(self):
-        # Test with known values (Boston to NYC)
-        lat1, lon1 = 42.3601, -71.0589  # Boston
-        lat2, lon2 = 40.7128, -74.0060  # NYC
-        distance = haversine(lat1, lon1, lat2, lon2)
-        
-        # Using a known approximate distance between Boston and NYC
-        self.assertAlmostEqual(distance, 306.22, places=2)
+        # Known test case: distance between (0, 0) and (0, 1)
+        lat1, lon1 = 0, 0
+        lat2, lon2 = 0, 1
+        expected_distance = 111.195  # Approximate distance in km
+        result = haversine(lat1, lon1, lat2, lon2)
+        self.assertAlmostEqual(result, expected_distance, places=2)
 
+class TestMatchClosestPoints(unittest.TestCase):
     def test_match_closest_points(self):
-        # Test with simple example
-        array1 = [(42.3601, -71.0589), (40.7128, -74.0060)]  # Boston, NYC
-        array2 = [(34.0522, -118.2437), (37.7749, -122.4194)]  # LA, SF
+        array1 = [(0, 0), (1, 1)]
+        array2 = [(0, 1), (1, 0)]
+        
+        # Expected result: (0, 0) is closest to (0, 1) with a distance of ~111.195
+        # (1, 1) is closest to (1, 0) with a distance of ~111.195
+        expected_matches = [
+            ((0, 0), (0, 1), 111.195),
+            ((1, 1), (1, 0), 111.195)
+        ]
+        
         matches = match_closest_points(array1, array2)
         
-        # Check that the closest match for Boston is LA, and for NYC is SF
-        self.assertEqual(matches[0][2], (34.0522, -118.2437))  # Boston -> LA
-        self.assertEqual(matches[1][2], (37.7749, -122.4194))  # NYC -> SF
+        for i, match in enumerate(matches):
+            self.assertAlmostEqual(match[3], expected_matches[i][2], places=2)
+            self.assertEqual(match[2], expected_matches[i][1])
 
-        # Check the distance values are reasonable
-        self.assertGreater(matches[0][3], 0)
-        self.assertGreater(matches[1][3], 0)
+class TestGetCoordinatesFromUser(unittest.TestCase):
+    @patch('builtins.input', side_effect=['12.34,56.78', '98.76,54.32', 'done'])
+    def test_get_coordinates_from_user(self, mock_input):
+        expected_coordinates = [(12.34, 56.78), (98.76, 54.32)]
+        result = get_coordinates_from_user()
+        self.assertEqual(result, expected_coordinates)
+
+    @patch('builtins.input', side_effect=['invalid_input', '12.34,56.78', 'done'])
+    def test_get_coordinates_from_user_invalid_input(self, mock_input):
+        expected_coordinates = [(12.34, 56.78)]
+        result = get_coordinates_from_user()
+        self.assertEqual(result, expected_coordinates)
 
 if __name__ == '__main__':
     unittest.main()
