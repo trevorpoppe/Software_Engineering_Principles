@@ -35,8 +35,4 @@ jobs:
 
       # Run the unit tests from the specific file using pytest
       - name: Run unit tests
-        run: |
-          pytest Software-Engineering-Principles/Project1-GeoLocationMatching/test_geolocation.py  # Update path to the correct test file
-
-        run: |
-          pytest test_geolocation.py  # Run the specific test file with pytest
+        run: pytest Software-Engineering-Principles/Project1-GeoLocationMatching/test_geolocation.py  # Run the test file
