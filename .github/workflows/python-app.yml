@@ -7,29 +7,33 @@ name: Python Tests
 on:
   push:
     branches:
-      - main
+      - main  # Trigger tests when pushing to the main branch
   pull_request:
     branches:
-      - main
+      - main  # Trigger tests when creating a pull request to the main branch
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
 
     steps:
+      # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Set Up Python
-        uses: actions/setup-python@v3
+      # Set up Python
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: 3.9  # Specify the Python version you want to use
 
-      - name: Install Dependencies
+      # Install dependencies
+      - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Assumes you have a requirements.txt file
 
-      - name: Run Tests
-        run: PYTHONPATH=$PYTHONPATH:$(pwd)/Project1-GeoLocationMatching pytest
-
+      # Run the unit tests from test_geolocation.py
+      - name: Run unit tests
+        run: |
+          python -m unittest test_geolocation.py  # Run the specific test file
