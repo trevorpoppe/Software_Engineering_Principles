@@ -10,7 +10,7 @@ class TestHaversine(unittest.TestCase):
         lat2, lon2 = 0, 1
         expected_distance = 111.195  # Approximate distance in km
         result = haversine(lat1, lon1, lat2, lon2)
-        self.assertAlmostEqual(result, expected_distance, places=2)
+        self.assertAlmostEqual(result, expected_distance, places=3)
 
 class TestMatchClosestPoints(unittest.TestCase):
     def test_match_closest_points(self):
@@ -27,7 +27,7 @@ class TestMatchClosestPoints(unittest.TestCase):
         matches = match_closest_points(array1, array2)
         
         for i, match in enumerate(matches):
-            self.assertAlmostEqual(match[3], expected_matches[i][2], places=2)
+            self.assertAlmostEqual(match[3], expected_matches[i][2], places=3)
             self.assertEqual(match[2], expected_matches[i][1])
 
 class TestGetCoordinatesFromUser(unittest.TestCase):
