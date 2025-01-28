@@ -2,7 +2,7 @@
 # This CI configuration file was partially assisted by ChatGPT from OpenAI.
 # ChatGPT helped in setting up the GitHub Actions workflow and configuring Python-based testing.
 
-name: Python application
+name: Python Tests
 
 on:
   push:
@@ -13,23 +13,22 @@ on:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set Up Python
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.11.4'
+          python-version: "3.10"
 
       - name: Install Dependencies
-      run: |
-        pip install -r requirements.txt  # If you have a requirements file
-        pip install pytest  # Ensure pytest is installed
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
 
-    - name: Run Tests
-      run: pytest
-
+      - name: Run Tests
+        run: pytest
