@@ -1,35 +1,34 @@
-name: Python Tests
+name: Python application
 
 on:
   push:
     branches:
-      - main  # Trigger tests when pushing to the main branch
+      - main
   pull_request:
     branches:
-      - main  # Trigger tests when creating a pull request to the main branch
+      - main
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      # Set up Python
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9  # Specify the Python version you want to use
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
 
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Install dependencies from requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      # Run the unit tests using pytest
-      - name: Run unit tests
-        run: |
-          pytest Project1-GeoLocationMatching/test_geolocation.py  # Correct path to the test file
+    - name: Add project directory to PYTHONPATH
+      run: echo "PYTHONPATH=$(pwd)/Project1-GeoLocationMatching" >> $GITHUB_ENV
+
+    - name: Run tests
+      run: |
+        pytest Project1-GeoLocationMatching/test_geolocation.py
