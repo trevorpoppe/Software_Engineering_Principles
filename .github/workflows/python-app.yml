@@ -31,4 +31,5 @@ jobs:
           pip install pytest
 
       - name: Run Tests
-        run: pytest
+        run: PYTHONPATH=$PYTHONPATH:$(pwd)/Project1-GeoLocationMatching pytest
+
