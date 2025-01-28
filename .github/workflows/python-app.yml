@@ -31,9 +31,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Assumes you have a requirements.txt file
+          pip install -r requirements.txt  # Install dependencies from requirements.txt
 
-      # Run the unit tests from test_geolocation.py
+      # Run the unit tests from test_geolocation.py using pytest
       - name: Run unit tests
         run: |
-          python -m unittest test_geolocation.py  # Run the specific test file
+          pytest test_geolocation.py  # Run the specific test file with pytest
