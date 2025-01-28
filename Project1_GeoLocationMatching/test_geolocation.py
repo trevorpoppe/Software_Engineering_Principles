@@ -1,5 +1,5 @@
 import unittest
-# from unittest.mock import patch
+from unittest.mock import patch
 from Project1_GeoLocationMatching.geo_matching import haversine, match_closest_points, get_coordinates_from_user
 
 
@@ -11,6 +11,7 @@ class TestHaversine(unittest.TestCase):
         expected_distance = 111.195  # Approximate distance in km
         result = haversine(lat1, lon1, lat2, lon2)
         self.assertAlmostEqual(result, expected_distance, places=3)
+
 
 class TestMatchClosestPoints(unittest.TestCase):
     def test_match_closest_points(self):
@@ -27,8 +28,12 @@ class TestMatchClosestPoints(unittest.TestCase):
         matches = match_closest_points(array1, array2)
         
         for i, match in enumerate(matches):
-            self.assertAlmostEqual(match[3], expected_matches[i][2], places=3)
-            self.assertEqual(match[2], expected_matches[i][1])
+            # Ensure the matched points are correct
+            self.assertEqual(match[0], expected_matches[i][0])
+            self.assertEqual(match[1], expected_matches[i][1])
+            # Check if the distance is approximately correct
+            self.assertAlmostEqual(match[2], expected_matches[i][2], places=3)
+
 
 class TestGetCoordinatesFromUser(unittest.TestCase):
     @patch('builtins.input', side_effect=['12.34,56.78', '98.76,54.32', 'done'])
@@ -42,6 +47,7 @@ class TestGetCoordinatesFromUser(unittest.TestCase):
         expected_coordinates = [(12.34, 56.78)]
         result = get_coordinates_from_user()
         self.assertEqual(result, expected_coordinates)
+
 
 if __name__ == '__main__':
     unittest.main()
