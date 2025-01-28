@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
-from Project1-GeoLocationMatching.geo_matching import haversine, match_closest_points, get_coordinates_from_user
+from Project1_GeoLocationMatching.geo_matching import haversine, match_closest_points, get_coordinates_from_user
+
 
 class TestHaversine(unittest.TestCase):
     def test_haversine(self):
