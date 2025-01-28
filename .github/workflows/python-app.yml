@@ -31,4 +31,4 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest Project1-GeoLocationMatching/test_geolocation.py
+        pytest Project1_GeoLocationMatching/test_geolocation.py
