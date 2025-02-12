@@ -1,0 +1,53 @@
+1. **Create User** (POST)
+Endpoint: POST /users
+Request Body:
+{
+  "name": "John Doe",
+  "username": "johndoe123",
+  "phone": "123-456-7890",
+  "email": "johndoe@example.com"
+}
+Response:
+{
+  "id": 1,
+  "name": "John Doe",
+  "username": "johndoe123",
+  "phone": "123-456-7890",
+  "email": "johndoe@example.com"
+}
+
+2. **Read User** (GET)
+Endpoint: GET /users/{id}
+Response:
+{
+  "id": 1,
+  "name": "John Doe",
+  "username": "johndoe123",
+  "phone": "123-456-7890",
+  "email": "johndoe@example.com"
+}
+
+3. **Update User** (PUT)
+Endpoint: PUT /users/{id}
+Request Body:
+{
+  "name": "John Doe",
+  "username": "johnnydoe123",
+  "phone": "987-654-3210",
+  "email": "johnnydoe@example.com"
+}
+Response:
+{
+  "id": 1,
+  "name": "John Doe",
+  "username": "johnnydoe123",
+  "phone": "987-654-3210",
+  "email": "johnnydoe@example.com"
+}
+
+4. **Delete User** (DELETE)
+Endpoint: DELETE /users/{id}
+Response:
+{
+  "message": "User deleted successfully"
+}
