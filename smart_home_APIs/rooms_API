@@ -1,0 +1,81 @@
+
+1. **Create Room** (POST)
+Endpoint: POST /rooms
+Request Body (User Input):
+{
+  "name": "Master Bedroom",
+  "floor": 1,
+  "size": 224 // sqft
+  "house": 1,  // ID of house
+  "type": "bedroom"
+}
+Response:
+{
+  "id": 1,
+  "name": "Master Bedroom",
+  "floor": 1,
+  "size": 224 // sqft
+  "house": 1,  // ID of house
+  "type": "bedroom"
+}
+
+2. **Read Room** (GET)
+Endpoint: GET /rooms/{id}
+Response:
+{
+  "id": 1,
+  "name": "Master Bedroom",
+  "floor": 1,
+  "size": 224,
+  "house": 1,
+  "type": "bedroom"
+}
+
+3. **Update Room** (PUT)
+Endpoint: PUT /rooms/{id}
+Request Body (User Input):
+{
+  "name": "Master Bedroom",
+  "floor": 1,
+  "size": 300,  // Updating size
+  "house": 1,
+  "type": "bedroom"
+}
+Response:
+{
+  "id": 1,
+  "name": "Master Bedroom",
+  "floor": 1,
+  "size": 300,  // Updating size
+  "house": 1,
+  "type": "bedroom"
+}
+
+4. **Delete Room** (DELETE)
+Endpoint: DELETE /rooms/{id}
+Response:
+{
+  "message": "Room deleted successfully"
+}
+
+5. **List All Rooms** (GET)
+Endpoint: GET /rooms
+Response:
+[
+  {
+    "id": 1,
+    "name": "Living Room",
+    "floor": 1,
+    "size": 250,
+    "house": 1,
+    "type": "living room"
+  },
+  {
+    "id": 2,
+    "name": "Bedroom",
+    "floor": 2,
+    "size": 200,
+    "house": 1,
+    "type": "bedroom"
+  }
+]
