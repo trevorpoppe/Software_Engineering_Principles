@@ -1,0 +1,126 @@
+
+1. **Create Device** (POST)
+Endpoint: POST /devices
+Request Body (User Input):
+{
+  "name": "Smart Thermostat",
+  "type": "thermostat",
+  "status": "on",
+  "room": 1,  // ID of the room the device is in
+  "house": 1,  // ID of the house the device belongs to
+  "settings": {
+    "temperature": 72
+  }
+}
+
+Response:
+{
+  "id": 1,
+  "name": "Smart Thermostat",
+  "type": "thermostat",
+  "status": "on",
+  "room": 1,
+  "house": 1,
+  "settings": {
+    "temperature": 72
+  }
+}
+
+
+2. **Read Device** (GET)
+Endpoint: GET /devices/{id}
+Response:
+{
+  "id": 1,
+  "name": "Smart Thermostat",
+  "type": "thermostat",
+  "status": "on",
+  "room": 1,
+  "house": 1,
+  "settings": {
+    "temperature": 72
+  }
+}
+
+
+3. **Update Device** (PUT)
+Endpoint: PUT /devices/{id}
+Request Body (User Input):
+{
+  "name": "Smart Thermostat",
+  "type": "thermostat",
+  "status": "off",  // Updating status
+  "room": 1,
+  "house": 1,
+  "settings": {
+    "temperature": 68  // Updating temperature setting
+  }
+}
+
+Response:
+{
+  "id": 1,
+  "name": "Smart Thermostat",
+  "type": "thermostat",
+  "status": "off",
+  "room": 1,
+  "house": 1,
+  "settings": {
+    "temperature": 68
+  }
+}
+
+
+4. **Delete Device** (DELETE)
+Endpoint: DELETE /devices/{id}
+Response:
+{
+  "message": "Device deleted successfully"
+}
+
+5. **List All Devices** (GET)
+Endpoint: GET /houses/{house_id}/devices
+Response:
+[
+  {
+    "id": 1,
+    "name": "Smart Thermostat",
+    "type": "thermostat",
+    "status": "on",
+    "room": 1,
+    "house": 1,
+    "settings": {
+      "temperature": 72
+    }
+  },
+  {
+    "id": 2,
+    "name": "Smart Light",
+    "type": "light",
+    "status": "off",
+    "room": 2,
+    "house": 1,
+    "settings": {
+      "brightness": 80
+    }
+  }
+]
+
+6. **List All Devices In a Room** (GET)
+  Endpoint: GET /rooms/{room_id}/devices
+  Response:
+  [
+  {
+    "id": 1,
+    "name": "Smart Thermostat",
+    "type": "thermostat",
+    "status": "on",
+    "room": 1,
+    "house": 1,
+    "settings": {
+      "temperature": 72
+    }
+  }
+]
+
+  
