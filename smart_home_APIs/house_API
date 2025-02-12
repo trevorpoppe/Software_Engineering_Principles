@@ -1,1 +1,103 @@
 
+1. **Create House** (POST)
+Endpoint: POST /houses
+Request Body (User Input):
+{
+  "name": "The Smith Residence",
+  "address": "1234 Elm Street, Springfield, IL",
+  "gps": {
+    "latitude": 39.7817,
+    "longitude": -89.6501
+  },
+  "owners": [1, 2],  // User IDs of owners
+  "occupants": [3, 4, 5]  // User IDs of occupants
+}
+Response:
+{
+  "id": 1,
+  "name": "The Smith Residence",
+  "address": "1234 Elm Street, Springfield, IL",
+  "gps": {
+    "latitude": 39.7817,
+    "longitude": -89.6501
+  },
+  "owners": [1, 2],
+  "occupants": [3, 4, 5]
+}
+
+2. **Read House** (GET)
+Endpoint: GET /houses/{id}
+Response:
+{
+  "id": 1,
+  "name": "The Smith Residence",
+  "address": "1234 Elm Street, Springfield, IL",
+  "gps": {
+    "latitude": 39.7817,
+    "longitude": -89.6501
+  },
+  "owners": [1, 2],
+  "occupants": [3, 4, 5]
+}
+
+3. **Update House** (PUT)
+Endpoint: PUT /houses/{id}
+Request Body (User Input):
+{
+  "name": "The Smith Residence",
+  "address": "5678 Oak Avenue, Springfield, IL",
+  "gps": {
+    "latitude": 39.7817,
+    "longitude": -89.6501
+  },
+  "owners": [1, 2, 6],  // Adding a new owner (user ID 6)
+  "occupants": [3, 4, 5, 6]  // Adding a new occupant (user ID 6)
+}
+Response:
+{
+  "id": 1,
+  "name": "The Smith Residence",
+  "address": "5678 Oak Avenue, Springfield, IL",
+  "gps": {
+    "latitude": 39.7817,
+    "longitude": -89.6501
+  },
+  "owners": [1, 2, 6],
+  "occupants": [3, 4, 5, 6]
+}
+
+4. **Delete House** (DELETE)
+Endpoint: DELETE /houses/{id}
+Response:
+{
+  "message": "House deleted successfully"
+}
+
+5. **List All Houses** (GET)
+Endpoint: GET /houses
+Response:
+[
+  {
+    "id": 1,
+    "name": "The Smith Residence",
+    "address": "1234 Elm Street, Springfield, IL",
+    "gps": {
+      "latitude": 39.7817,
+      "longitude": -89.6501
+    },
+    "owners": [1, 2],
+    "occupants": [3, 4, 5]
+  },
+  {
+    "id": 2,
+    "name": "The Johnson Home",
+    "address": "4321 Maple Road, Springfield, IL",
+    "gps": {
+      "latitude": 39.7925,
+      "longitude": -89.6367
+    },
+    "owners": [2, 3],
+    "occupants": [4, 5, 6]
+  }
+]
+
