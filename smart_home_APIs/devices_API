@@ -1,126 +1,58 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import Dict, List, Optional
 
-1. **Create Device** (POST)
-Endpoint: POST /devices
-Request Body (User Input):
-{
-  "name": "Smart Thermostat",
-  "type": "thermostat",
-  "status": "on",
-  "room": 1,  // ID of the room the device is in
-  "house": 1,  // ID of the house the device belongs to
-  "settings": {
-    "temperature": 72
-  }
-}
+app = FastAPI()
 
-Response:
-{
-  "id": 1,
-  "name": "Smart Thermostat",
-  "type": "thermostat",
-  "status": "on",
-  "room": 1,
-  "house": 1,
-  "settings": {
-    "temperature": 72
-  }
-}
+# In-memory database simulation
+devices_db: Dict[int, dict] = {}
+device_id_counter = 1
 
+class Device(BaseModel):
+    name: str
+    type: str
+    status: str
+    room: int
+    house: int
+    settings: dict
+    id: Optional[int] = None
 
-2. **Read Device** (GET)
-Endpoint: GET /devices/{id}
-Response:
-{
-  "id": 1,
-  "name": "Smart Thermostat",
-  "type": "thermostat",
-  "status": "on",
-  "room": 1,
-  "house": 1,
-  "settings": {
-    "temperature": 72
-  }
-}
+@app.post("/devices", response_model=Device)
+def create_device(device: Device):
+    global device_id_counter
+    new_device = device.model_dump()
+    new_device["id"] = device_id_counter
+    devices_db[device_id_counter] = new_device
+    device_id_counter += 1
+    return Device(**new_device)
 
+@app.get("/devices/{id}", response_model=Device)
+def read_device(id: int):
+    if id not in devices_db:
+        raise HTTPException(status_code=404, detail="Device not found")
+    device = devices_db[id]
+    return Device(**device)
 
-3. **Update Device** (PUT)
-Endpoint: PUT /devices/{id}
-Request Body (User Input):
-{
-  "name": "Smart Thermostat",
-  "type": "thermostat",
-  "status": "off",  // Updating status
-  "room": 1,
-  "house": 1,
-  "settings": {
-    "temperature": 68  // Updating temperature setting
-  }
-}
+@app.put("/devices/{id}", response_model=Device)
+def update_device(id: int, device: Device):
+    if id not in devices_db:
+        raise HTTPException(status_code=404, detail="Device not found")
+    updated_device = device.model_dump()
+    updated_device["id"] = id
+    devices_db[id] = updated_device
+    return Device(**updated_device)
 
-Response:
-{
-  "id": 1,
-  "name": "Smart Thermostat",
-  "type": "thermostat",
-  "status": "off",
-  "room": 1,
-  "house": 1,
-  "settings": {
-    "temperature": 68
-  }
-}
+@app.delete("/devices/{id}")
+def delete_device(id: int):
+    if id not in devices_db:
+        raise HTTPException(status_code=404, detail="Device not found")
+    del devices_db[id]
+    return {"message": "Device deleted successfully"}
 
+@app.get("/houses/{house_id}/devices", response_model=List[Device])
+def list_devices(house_id: int):
+    return [Device(**device) for device in devices_db.values() if device["house"] == house_id]
 
-4. **Delete Device** (DELETE)
-Endpoint: DELETE /devices/{id}
-Response:
-{
-  "message": "Device deleted successfully"
-}
-
-5. **List All Devices** (GET)
-Endpoint: GET /houses/{house_id}/devices
-Response:
-[
-  {
-    "id": 1,
-    "name": "Smart Thermostat",
-    "type": "thermostat",
-    "status": "on",
-    "room": 1,
-    "house": 1,
-    "settings": {
-      "temperature": 72
-    }
-  },
-  {
-    "id": 2,
-    "name": "Smart Light",
-    "type": "light",
-    "status": "off",
-    "room": 2,
-    "house": 1,
-    "settings": {
-      "brightness": 80
-    }
-  }
-]
-
-6. **List All Devices In a Room** (GET)
-  Endpoint: GET /rooms/{room_id}/devices
-  Response:
-  [
-  {
-    "id": 1,
-    "name": "Smart Thermostat",
-    "type": "thermostat",
-    "status": "on",
-    "room": 1,
-    "house": 1,
-    "settings": {
-      "temperature": 72
-    }
-  }
-]
-
-  
+@app.get("/rooms/{room_id}/devices", response_model=List[Device])
+def list_devices_in_room(room_id: int):
+    return [Device(**device) for device in devices_db.values() if device["room"] == room_id]
