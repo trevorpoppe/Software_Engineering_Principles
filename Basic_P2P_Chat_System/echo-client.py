@@ -1,13 +1,17 @@
-#!/usr/bin/env python3
-
 import socket
 
-HOST = "127.0.0.1"  # The server's hostname or IP address
-PORT = 65432  # The port used by the server
+HOST = '127.0.0.1'  # Localhost
+PORT = 65432        # Port to listen on
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    s.sendall(b"Hello, world")
-    data = s.recv(1024)
+    s.bind((HOST, PORT))
+    s.listen()
+    print(f"Server listening on {HOST}:{PORT}")
+    
+    conn, addr = s.accept()  # Accept a connection
+    with conn:
+        print(f"Connected by {addr}")
+        data = conn.recv(1024)
+        conn.sendall(data)  # Echo back the received data
 
-print(f"Received {data!r}")
+# This code was generated with the help of ChatGPT
