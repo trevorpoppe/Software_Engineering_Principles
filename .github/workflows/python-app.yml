@@ -24,11 +24,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Add project directory to PYTHONPATH
-      run: echo "PYTHONPATH=$(pwd)/Project1-GeoLocationMatching" >> $GITHUB_ENV
+    - name: Add repository root to PYTHONPATH
+      run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
 
     - name: Run tests
-      run: |
-        pytest Project1_GeoLocationMatching/test_geolocation.py
+      run: pytest --maxfail=1 --disable-warnings -v
