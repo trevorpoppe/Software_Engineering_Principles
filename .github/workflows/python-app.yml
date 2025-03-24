@@ -24,6 +24,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install --upgrade setuptools wheel  # Ensures latest packaging tools
+        pip install fastapi  # Manually install FastAPI
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Add repository root to PYTHONPATH
