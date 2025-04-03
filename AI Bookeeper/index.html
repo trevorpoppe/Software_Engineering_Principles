@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to SQLite</title>
+</head>
+<body>
+    <h1>Upload a CSV File to SQLite</h1>
+    
+    <!-- Upload Form -->
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="file">Choose a CSV file:</label>
+        <input type="file" name="file" id="file" required>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <hr>
+    
+    <h2>Run SQL Query</h2>
+    <form action="/query" method="POST">
+        <textarea name="query" rows="4" cols="50" placeholder="Enter your SQL query here"></textarea><br>
+        <button type="submit">Run Query</button>
+    </form>
+    
+    {% if results %}
+    <h3>Query Results:</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                {% for result in results[0] %}
+                <th>{{ result }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results[1:] %}
+            <tr>
+                {% for value in row %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</body>
+</html>
