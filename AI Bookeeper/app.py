@@ -49,5 +49,33 @@ def query():
     conn.close()
     return render_template("index.html", results=[headers] + rows)
 
+@app.route('/ask', methods=['POST'])
+def ask():
+    user_prompt = request.form['prompt']
+
+    try:
+        # Generate SQL query using OpenAI
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"Generate a SQL query to run on a SQLite database given this request: {user_prompt}",
+            max_tokens=150,
+            temperature=0.2
+        )
+        sql_query = response.choices[0].text.strip()
+
+        # Execute the generated SQL query
+        conn = sqlite3.connect(db_name)
+        cursor = conn.cursor()
+        cursor.execute(sql_query)
+        rows = cursor.fetchall()
+        headers = [desc[0] for desc in cursor.description] if cursor.description else []
+        conn.close()
+
+        return render_template("index.html", results=[headers] + rows, ai_query=sql_query)
+
+    except Exception as e:
+        return render_template("index.html", error=f"AI query error: {e}")
+
+
 if __name__ == '__main__':
     app.run(debug=True)
