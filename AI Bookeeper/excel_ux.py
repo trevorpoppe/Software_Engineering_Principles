@@ -4,7 +4,8 @@ import openai
 import logging
 
 # Set up OpenAI API key (get your own API key from OpenAI)
-openai.api_key = 'your-openai-api-key'
+import os
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Set up error logging
 logging.basicConfig(filename='error_log.txt', level=logging.ERROR, 
@@ -213,14 +214,26 @@ def ai_interaction(db_name):
 
         execute_sql_query_from_ai(db_name, query)
 
-# Main execution
-db_name = 'bookkeeper.db'  # SQLite database file name
+def main():
+    db_name = 'bookkeeper.db'
 
-# Choose whether to run the CLI or AI interaction
-# Uncomment one of the lines below to start the desired interaction mode
+    while True:
+        print("\n🎯 Welcome to AI Bookkeeper")
+        print("1: Use Command Line Interface (CLI)")
+        print("2: Chat with AI to generate SQL")
+        print("3: Exit")
 
-# Start the CLI mode
-# start_cli(db_name)
+        choice = input("Enter your choice: ").strip()
 
-# Start AI interaction mode
-ai_interaction(db_name)
+        if choice == '1':
+            start_cli(db_name)
+        elif choice == '2':
+            ai_interaction(db_name)
+        elif choice == '3':
+            print("👋 Exiting. Have a great day!")
+            break
+        else:
+            print("❌ Invalid input. Please choose 1, 2, or 3.")
+
+if __name__ == "__main__":
+    main()
