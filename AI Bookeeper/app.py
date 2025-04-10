@@ -54,16 +54,26 @@ def ask():
     user_prompt = request.form['prompt']
 
     try:
-        # Generate SQL query using OpenAI
+        # Ask OpenAI to generate a SQL query
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Generate a SQL query to run on a SQLite database given this request: {user_prompt}",
+            prompt=f"Only return a valid SQLite SELECT query for this request: {user_prompt}",
             max_tokens=150,
             temperature=0.2
         )
-        sql_query = response.choices[0].text.strip()
 
-        # Execute the generated SQL query
+        # Get and clean the SQL
+        raw_response = response.choices[0].text.strip()
+        print("Raw OpenAI response:", raw_response)
+
+        # Optional: Strip explanation if included
+        sql_lines = raw_response.splitlines()
+        sql_query = "\n".join(line for line in sql_lines if line.strip().upper().startswith("SELECT"))
+
+        if not sql_query.lower().startswith("select"):
+            raise ValueError("The AI did not return a valid SELECT query.")
+
+        # Run the query
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
         cursor.execute(sql_query)
@@ -71,10 +81,11 @@ def ask():
         headers = [desc[0] for desc in cursor.description] if cursor.description else []
         conn.close()
 
-        return render_template("index.html", results=[headers] + rows, ai_query=sql_query)
+        return render_template("index.html", ai_query=sql_query, results=[headers] + rows)
 
     except Exception as e:
         return render_template("index.html", error=f"AI query error: {e}")
+
 
 
 if __name__ == '__main__':
