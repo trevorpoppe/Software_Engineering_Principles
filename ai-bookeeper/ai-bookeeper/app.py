@@ -4,6 +4,17 @@ import pandas as pd
 import os
 import openai
 
+def get_schema_from_db():
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, sql FROM sqlite_master WHERE type='table';")
+    schemas = cursor.fetchall()
+    conn.close()
+    schema_strings = []
+    for name, schema in schemas:
+        schema_strings.append(f"-- Table name: {name}\n{schema}")
+    return "\n".join(schema_strings)
+
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Make sure to set this in your shell or .env
 
 
@@ -54,9 +65,21 @@ def ask():
     user_prompt = request.form['prompt']
 
     try:
-        # Use the Chat API with gpt-3.5-turbo or gpt-4
+        schema = get_schema_from_db()
+
+        prompt_with_schema = f"""
+        Given the following SQLite database schema:
+
+        {schema}
+
+        Write an SQLite SELECT query to answer this question:
+        {user_prompt}
+
+        Return ONLY the query without explanation.
+        """
+
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # or "gpt-4" if you have access
+            model="gpt-3.5-turbo",
             messages=[
                 {
                     "role": "system",
@@ -64,7 +87,7 @@ def ask():
                 },
                 {
                     "role": "user",
-                    "content": user_prompt
+                    "content": prompt_with_schema
                 }
             ],
             temperature=0.2,
@@ -74,11 +97,9 @@ def ask():
         sql_query = response.choices[0].message.content.strip()
         print("Generated SQL:", repr(sql_query))
 
-        # Make sure the response starts with SELECT
         if not sql_query.lower().startswith("select"):
             raise ValueError("AI did not return a valid SELECT query.")
 
-        # Execute the SQL
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
         cursor.execute(sql_query)
@@ -90,6 +111,7 @@ def ask():
 
     except Exception as e:
         return render_template("index.html", error=f"AI query error: {e}")
+
 
 
 
