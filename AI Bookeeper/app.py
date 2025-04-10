@@ -6,6 +6,8 @@ import os
 app = Flask(__name__)
 db_name = 'bookkeeper.db'
 
+os.makedirs("uploads", exist_ok=True)
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template("index.html")
