@@ -2,6 +2,10 @@ from flask import Flask, request, render_template
 import sqlite3
 import pandas as pd
 import os
+import openai
+
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Make sure to set this in your shell or .env
+
 
 app = Flask(__name__)
 db_name = 'bookkeeper.db'
