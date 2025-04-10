@@ -8,7 +8,7 @@
     <form action="/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <button type="submit">Upload</button>
-        </form>
+    </form>
 
     {% if uploaded %}
         <p style="color:green;">✅ CSV uploaded successfully to the 'sales' table.</p>
@@ -36,36 +36,51 @@
 
     <hr>
 
+    <h2>Ask a Question (AI-powered)</h2>
+    <form action="/ask" method="POST">
+        <textarea name="prompt" rows="4" cols="50" placeholder="Ask your question in plain English..."></textarea><br>
+        <button type="submit">Ask AI</button>
+    </form>
+
+    {% if ai_query %}
+        <p><strong>AI Generated SQL:</strong></p>
+        <pre>{{ ai_query }}</pre>
+    {% endif %}
+
+    <hr>
+
     <h2>Run SQL Query</h2>
     <form action="/query" method="POST">
         <textarea name="query" rows="4" cols="50" placeholder="Enter your SQL query"></textarea><br>
         <button type="submit">Run Query</button>
     </form>
 
+    <hr>
+
     {% if error %}
         <p style="color:red;">Error: {{ error }}</p>
     {% endif %}
 
     {% if results %}
-    <h3>Query Results:</h3>
-    <table border="1">
-        <thead>
-            <tr>
-                {% for header in results[0] %}
-                <th>{{ header }}</th>
+        <h3>Query Results:</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for header in results[0] %}
+                    <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results[1:] %}
+                <tr>
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in results[1:] %}
-            <tr>
-                {% for value in row %}
-                <td>{{ value }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
     {% endif %}
 </body>
 </html>
