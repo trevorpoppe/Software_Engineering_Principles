@@ -8,7 +8,31 @@
     <form action="/upload" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <button type="submit">Upload</button>
-    </form>
+        </form>
+
+    {% if uploaded %}
+        <p style="color:green;">✅ CSV uploaded successfully to the 'sales' table.</p>
+
+        <h3>Preview of Uploaded File:</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in preview %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <hr>
 
