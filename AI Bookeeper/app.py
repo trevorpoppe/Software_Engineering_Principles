@@ -54,26 +54,31 @@ def ask():
     user_prompt = request.form['prompt']
 
     try:
-        # Ask OpenAI to generate a SQL query
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Only return a valid SQLite SELECT query for this request: {user_prompt}",
-            max_tokens=150,
-            temperature=0.2
+        # Use the Chat API with gpt-3.5-turbo or gpt-4
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # or "gpt-4" if you have access
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant that only returns valid SQLite SELECT queries with no explanations."
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt
+                }
+            ],
+            temperature=0.2,
+            max_tokens=200
         )
 
-        # Get and clean the SQL
-        raw_response = response.choices[0].text.strip()
-        print("Raw OpenAI response:", raw_response)
+        sql_query = response.choices[0].message.content.strip()
+        print("Generated SQL:", repr(sql_query))
 
-        # Optional: Strip explanation if included
-        sql_lines = raw_response.splitlines()
-        sql_query = "\n".join(line for line in sql_lines if line.strip().upper().startswith("SELECT"))
-
+        # Make sure the response starts with SELECT
         if not sql_query.lower().startswith("select"):
-            raise ValueError("The AI did not return a valid SELECT query.")
+            raise ValueError("AI did not return a valid SELECT query.")
 
-        # Run the query
+        # Execute the SQL
         conn = sqlite3.connect(db_name)
         cursor = conn.cursor()
         cursor.execute(sql_query)
