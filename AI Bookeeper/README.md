@@ -21,8 +21,8 @@
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/trevorpoppe/ai-bookkeeper.git
-cd ai-bookkeeper
+git clone https://github.com/trevorpoppe/"AI Bookeeper".git
+cd "AI Bookeeper"
 ```
 
 ### 2. Set up Python environment
