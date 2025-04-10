@@ -1,59 +1,110 @@
-# AI Bookeeper Project
 
-Goal: Develop an equivalent to Excel or Google Sheet application where the interaction with the application is a chat interaction
+# 🧾 AI Bookkeeper
 
-Elements:
-- Sqllite
-- OpenAI
-- Pandas
+**AI Bookkeeper** is a lightweight, AI-powered web app that lets you upload CSV files into a SQLite database, then run queries manually or by asking plain-English questions — powered by OpenAI.
 
-Steps:
-- Step 1:  Load CSV Files into SQLLite
-- Step 2:  Create Tables Dynamically from CSV
-- Step 3:  Handle Schema Conflicts
-- Step 4:  Simulate AI using input (the input to be schemas)
-- Step 5:  Add AI to generate SQL
+---
 
-Step 1:
-Objective: Understand the structure of CSV and how it maps to SQL tables.
-Activities:
-Manually create a table in SQLite.
-Use pandas.read_csv() to load data.
-Use dataframe.to_sql() to insert data into SQLite.
-Run basic queries using sqlite3 or DB browser.
-Key SQL Concepts: SELECT, WHERE, LIMIT
+## ⚙️ Features
 
-Step 2:
-Objective: Automate table creation by inferring schema from CSV.
-Activities:
-Write a function to inspect column names and data types.
-Generate and execute a CREATE TABLE statement dynamically.
-Use pandas and Python string formatting to build SQL.
-Key Concepts: Data type mapping (TEXT, INTEGER, REAL)
+- 📂 Upload CSV files to create or replace SQLite tables
+- 📊 View a preview of uploaded data
+- 🧠 Ask natural language questions and get auto-generated SQL queries using OpenAI (ChatGPT)
+- 🧪 Run custom SQL queries manually
+- 🖥️ Web interface powered by Flask
+- 🛡️ AI queries restricted to safe `SELECT` statements
 
-Step 3:
-Objective: Learn to build robust systems that validate inputs.
-Activities:
-Use PRAGMA table_info() to detect existing table schema.
-Prompt user on schema conflict: overwrite, rename, or skip.
-Implement error logging to a file (error_log.txt).
-Key Concepts: Defensive coding, logging, user input control
+---
 
-Step 4:
-Objective: Create a simple, interactive assistant using Python CLI.
-Activities:
-Use a loop with input() to simulate chatbot-like interaction.
-Allow users to load CSV files, run SQL queries, or exit.
-Provide table listing functionality using sqlite_master.
-Key Concepts: Control flow, CLI design, user experience
+## 🚀 Getting Started
 
-Step 5:
-Objective: Enable interaction through plain language using ChatGPT or another LLM.
-Activities:
-Pass table schema and user request to an LLM.
-Let AI generate SQL and execute it.
-Display results and optionally the generated SQL.
-Key Concepts: Prompt engineering, schema context, LLM integration
+### 1. Clone the Repo
 
+```bash
+git clone https://github.com/yourusername/ai-bookkeeper.git
+cd ai-bookkeeper
+```
 
+### 2. Set up Python environment
 
+```bash
+pip install -r requirements.txt
+```
+
+If you don’t have `requirements.txt`, install manually:
+
+```bash
+pip install flask openai pandas python-dotenv
+```
+
+### 3. Set your OpenAI API Key
+
+#### Option A: Use environment variable
+
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
+#### Option B: Use a `.env` file
+
+Create a file called `.env` in the project root:
+
+```
+OPENAI_API_KEY=sk-...
+```
+
+---
+
+## 🧪 Running the App
+
+```bash
+python app.py
+```
+
+Then open your browser to: [http://localhost:5000](http://localhost:5000)
+
+---
+
+## 💡 Example Prompts for AI
+
+> "Show total revenue by date"  
+> "Which day had the highest sales?"  
+> "List the number of sales per product_id"
+
+The AI will return and execute a valid SQL `SELECT` query using your data.
+
+---
+
+## 🛠 Project Structure
+
+```
+AI_Bookkeeper/
+├── app.py               # Flask web app
+├── uploads/             # Uploaded CSV files
+├── templates/
+│   └── index.html       # HTML UI
+├── .env                 # (Optional) API key
+├── bookkeeper.db        # SQLite database
+└── README.md
+```
+
+---
+
+## 📌 Notes
+
+- The uploaded CSV must have headers (first row = column names)
+- The table created is named `sales` by default
+- Only `SELECT` queries are allowed from AI to protect your data
+- Uses `gpt-3.5-turbo` via OpenAI’s Chat API
+
+---
+
+## 📄 License
+
+MIT — free to use, modify, and share.
+
+---
+
+## 🙌 Credits
+
+Built with ❤️ using Flask, Pandas, SQLite, and OpenAI.
