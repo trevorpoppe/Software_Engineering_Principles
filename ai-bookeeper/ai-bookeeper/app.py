@@ -2,13 +2,12 @@ from flask import Flask, request, render_template
 import sqlite3
 import pandas as pd
 import os
-from dotenv import load_dotenv  # <-- Add this
+from dotenv import load_dotenv
+load_dotenv()
 
-load_dotenv()  # <-- Load .env file
+from openai import OpenAI
 
-print("API Key Loaded:", os.getenv("OPENAI_API_KEY"))  # ✅ Confirm it's set
-
-import openai
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def get_schema_from_db():
     conn = sqlite3.connect(db_name)
