@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 import sqlite3
 import pandas as pd
 import os
-import openai
+from openai import OpenAI
 
 def get_schema_from_db():
     conn = sqlite3.connect(db_name)
@@ -15,7 +15,7 @@ def get_schema_from_db():
         schema_strings.append(f"-- Table name: {name}\n{schema}")
     return "\n".join(schema_strings)
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Make sure to set this in your shell or .env
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 app = Flask(__name__)
@@ -62,8 +62,11 @@ def query():
 
 @app.route('/ask', methods=['POST'])
 def ask():
-    user_prompt = request.form['prompt']
+    import openai
+    from openai import OpenAI
 
+    user_prompt = request.form['prompt']
+    
     try:
         schema = get_schema_from_db()
 
@@ -78,7 +81,9 @@ def ask():
         Return ONLY the query without explanation.
         """
 
-        response = openai.ChatCompletion.create(
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
@@ -111,6 +116,7 @@ def ask():
 
     except Exception as e:
         return render_template("index.html", error=f"AI query error: {e}")
+
 
 
 
